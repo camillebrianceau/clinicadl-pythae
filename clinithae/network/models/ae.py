@@ -43,7 +43,7 @@ class pythae_AE(BasePythae):
         from pythae.trainers import BaseTrainerConfig
 
         return BaseTrainerConfig(
-            output_dir=output_dir,
+            output_dir=str(output_dir),
             num_epochs=num_epochs,
             learning_rate=learning_rate,
             per_device_train_batch_size=batch_size,

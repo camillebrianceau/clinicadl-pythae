@@ -1,7 +1,7 @@
 import os
 
 import click
-
+from pathlib import Path
 from clinicadl import MapsManager
 from clinicadl.train.train_utils import build_train_dict
 from clinicadl.utils.cli_param import train_option
@@ -44,19 +44,16 @@ def cli(
     https://clinicadl.readthedocs.io/en/stable/Train/Introduction/#configuration-file
     """
 
-    parameters = build_train_dict(config_file, "reconstruction")
+    parameters = build_train_dict(Path(config_file), "reconstruction")
 
     parameters["network_task"] = "reconstruction"
-    parameters["caps_directory"] = caps_directory
-    parameters["tsv_path"] = tsv_directory
+    parameters["caps_directory"] = Path(caps_directory)
+    parameters["tsv_path"] = Path(tsv_directory)
     parameters["mode"] = "image"
     # parameters["input_size"] = (1, 80, 96, 80)
-    preprocessing_json_path = os.path.join(
-        caps_directory,
-        "tensor_extraction",
-        preprocessing_json,
-    )
+    preprocessing_json_path = caps_directory / "tensor_extraction" / preprocessing_json
     parameters["preprocessing_dict"] = read_preprocessing(preprocessing_json_path)
+    parameters["pythae"]=True
 
     maps_manager = MapsManager(output_maps_directory, parameters, verbose="info")
     # launch training procedure for Pythae
